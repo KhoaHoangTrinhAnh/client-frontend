@@ -20,26 +20,49 @@ export default function Home() {
 };
 
   useEffect(() => {
-    // Gọi API lấy danh sách nội dung từ backend
+    // Lấy danh sách nội dung mỗi khi load
     axios.get("http://localhost:3000/contents").then((res) => {
       setContents(res.data);
     });
 
-    socket.on("newContent", handleNewContent);
-
-    socket.on("newContent", (newItem: Content) => {
-    setContents((prev) => {
-      // Nếu nội dung đã có trong danh sách, không thêm nữa
-      const exists = prev.some(item => item._id === newItem._id);
-      if (exists) return prev;
-      return [newItem, ...prev];
-    });
-  });
-
-    return () => {
-      socket.off("newContent", handleNewContent); // cleanup tránh leak
+    // Lắng nghe real-time khi có bài viết mới
+    const handleNewContent = (newItem: Content) => {
+      setContents((prev) => {
+        const exists = prev.some((item) => item._id === newItem._id);
+        if (exists) return prev;
+        return [newItem, ...prev];
+      });
     };
-  }, []);
+
+    // Lắng nghe real-time khi có bài viết bị xoá
+    const handleDeleteContent = ({ id }: { id: string }) => {
+      setContents((prev) => prev.filter((item) => item._id !== id));
+      // Nếu bài đang xem chi tiết bị xoá, quay lại danh sách
+      if (selected?._id === id) {
+        setSelected(null);
+      }
+    };
+
+    const handleUpdateContent = (updatedItem: Content) => {
+      setContents((prev) =>
+        prev.map((item) => (item._id === updatedItem._id ? updatedItem : item))
+      );
+      // Nếu đang xem chi tiết thì cập nhật luôn
+      if (selected?._id === updatedItem._id) setSelected(updatedItem);
+    };
+
+    socket.on("newContent", handleNewContent);
+    socket.on("deleteContent", handleDeleteContent);
+    socket.on("updateContent", handleUpdateContent);
+
+
+    // Cleanup khi unmount
+    return () => {
+      socket.off("newContent", handleNewContent);
+      socket.off("deleteContent", handleDeleteContent);
+      socket.off("updateContent", handleUpdateContent);
+    };
+  }, [selected]);
 
   if (selected) {
     return (
