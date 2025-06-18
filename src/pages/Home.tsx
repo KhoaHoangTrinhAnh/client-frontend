@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ContentViewer from "../components/ContentViewer";
 import socket from "../socket";
 import axios from "axios";
+import Header from "../components/Header";
 
 type Block = { type: "text" | "image" | "video"; value: string };
 type Content = { _id: string; title: string; blocks: Block[] };
@@ -11,18 +12,21 @@ export default function Home() {
   const [contents, setContents] = useState<Content[]>([]);
   const [selected, setSelected] = useState<Content | null>(null);
 
-  const handleNewContent = (newItem: Content) => {
-  setContents((prev) => {
-    const exists = prev.some(item => item._id === newItem._id);
-    if (exists) return prev;
-    return [newItem, ...prev];
-  });
-};
-
   useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    
     // Lấy danh sách nội dung mỗi khi load
-    axios.get("http://localhost:3000/contents").then((res) => {
+      axios
+    .get("http://localhost:3000/contents", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
       setContents(res.data);
+    })
+    .catch((err) => {
+      console.error("Lỗi khi lấy nội dung:", err);
     });
 
     // Lắng nghe real-time khi có bài viết mới
@@ -66,7 +70,7 @@ export default function Home() {
 
   if (selected) {
     return (
-      <div className="p-4">
+      <div className="w-screen p-4">
         <button
           className="mb-4 text-blue-500"
           onClick={() => setSelected(null)}
@@ -79,8 +83,8 @@ export default function Home() {
   }
 
   return (
-    <div className="p-4 max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-6">Client Real-time Viewer</h1>
+    <div className="h-screen w-screen p-4 pt-20 mx-auto">
+      <Header />
       {contents.length === 0 ? (
         <p className="text-center mt-10">Chưa có nội dung nào...</p>
       ) : (

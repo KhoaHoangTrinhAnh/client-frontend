@@ -1,54 +1,58 @@
-# React + TypeScript + Vite
+# client-frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Đây là frontend client dành cho người dùng cuối, cho phép xem nội dung công khai theo thời gian thực.
 
-Currently, two official plugins are available:
+## 🧱 Công nghệ sử dụng
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [React](https://reactjs.org/) + [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Router](https://reactrouter.com/)
+- [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
 
-## Expanding the ESLint configuration
+## 🚀 Chức năng
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Đăng ký, đăng nhập người dùng
+- Xem nội dung công khai (text, image, video)
+- Nhận nội dung mới **real-time** thông qua WebSocket
+- Không phân quyền: tất cả user (admin, editor, client) đều có thể đăng nhập và xem
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## ⚙️ Cài đặt
+```bash
+# Clone repository
+git clone https://github.com/your-username/client-frontend.git
+cd client-frontend
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# Cài đặt dependencies
+npm install
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# Khởi chạy ứng dụng
+npm run dev
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Ứng dụng sẽ chạy tại: http://localhost:5173
+Lưu ý: Hệ thống hoạt động chuẩn khi bạn đã khởi động đúng thứ tự: backend ->  client-frontend -> admin-frontend
+
+📁 Cấu trúc cơ bản
+client-frontend/
+├── src/
+│   ├── pages/         # Các trang chính: Login, Register, Home
+│   ├── components/    # Các thành phần giao diện
+│   ├── hooks/    # Các thành phần giao diện
+│   ├── services/      # Gọi API và socket client
+│   └── main.tsx       # Điểm khởi đầu ứng dụng
+├── public/
+├── vite.config.ts
+└── package.json
+
+📦 Phụ thuộc chính
+- axios
+- react-router-dom
+- socket.io-client
+- classnames
+- tailwindcss, postcss, autoprefixer
+
+📬 Liên hệ
+Tác giả: Hoàng Trịnh Anh Khoa
+Email: khoahoangtrinhanh@gmail.com
+link Github: https://github.com/KhoaHoangTrinhAnh
+

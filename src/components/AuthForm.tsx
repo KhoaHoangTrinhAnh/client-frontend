@@ -31,24 +31,28 @@ export default function AuthForm({ isLogin }: Props) {
 
       
       if (isLogin) {
-      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("access_token", data.access_token);
       navigate("/");
-    } else {
-      alert("Đăng ký thành công. Vui lòng đăng nhập.");
-      navigate("/login");
-    }
-    } catch (err: any) {
-      alert(err.message);
+      } else {
+        alert("Đăng ký thành công. Vui lòng đăng nhập.");
+        navigate("/login");
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("Đã xảy ra lỗi không xác định");
+      }
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className=" w-screen min-h-screen flex items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-xl shadow-md w-full max-w-md space-y-4"
       >
-        <h2 className="text-2xl font-bold text-center">
+        <h2 className="text-2xl text-black font-bold text-center">
           {isLogin ? "Đăng nhập" : "Đăng ký"}
         </h2>
 
