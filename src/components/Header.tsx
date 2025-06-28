@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
     const handleLogout = async () => {
     const token = localStorage.getItem("access_token");
+    
 
     if (!token) return;
 
     try {
-        await fetch("http://localhost:3000/auth/logout", {
+        await fetch(`${API_URL}/auth/logout`, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,

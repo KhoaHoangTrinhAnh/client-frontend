@@ -11,13 +11,14 @@ type Content = { _id: string; title: string; blocks: Block[] };
 export default function Home() {
   const [contents, setContents] = useState<Content[]>([]);
   const [selected, setSelected] = useState<Content | null>(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     
     // Lấy danh sách nội dung mỗi khi load
       axios
-    .get("http://localhost:3000/contents", {
+    .get(`${API_URL}/contents`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

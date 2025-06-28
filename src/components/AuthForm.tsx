@@ -11,6 +11,7 @@ export default function AuthForm({ isLogin }: Props) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +19,7 @@ export default function AuthForm({ isLogin }: Props) {
     const payload = isLogin ? { email, password } : { name, email, password };
 
     try {
-      const res = await fetch(import.meta.env.VITE_API_URL + endpoint, {
+      const res = await fetch(`${API_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -41,7 +42,7 @@ export default function AuthForm({ isLogin }: Props) {
       if (err instanceof Error) {
         alert(err.message);
       } else {
-        alert("Đã xảy ra lỗi không xác định");
+        alert("Đã xảy ra lỗi đăng nhập");
       }
     }
   };
